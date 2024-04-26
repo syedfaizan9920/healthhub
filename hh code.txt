@@ -1,0 +1,63 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Dummy data for demonstration purposes
+medicines = [
+    {"id": 1, "name": "Paracetamol", "price": 10, "quantity": 100},
+    {"id": 2, "name": "Aspirin", "price": 15, "quantity": 50},
+    {"id": 3, "name": "Omeprazole", "price": 20, "quantity": 30}
+]
+
+@app.route('/api/medicines', methods=['GET'])
+def get_medicines():
+    return jsonify(medicines)
+
+@app.route('/api/medicine/<int:id>', methods=['GET'])
+def get_medicine(id):
+    medicine = next((med for med in medicines if med['id'] == id), None)
+    if medicine:
+        return jsonify(medicine)
+    else:
+        return jsonify({"error": "Medicine not found"}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1mg Clone</title>
+</head>
+<body>
+    <h1>1mg Clone</h1>
+    <div id="medicines"></div>
+
+    <script>
+        async function fetchMedicines() {
+            const response = await fetch('/api/medicines');
+            const data = await response.json();
+            return data;
+        }
+
+        window.onload = async () => {
+            const medicines = await fetchMedicines();
+            const medicinesDiv = document.getElementById('medicines');
+
+            medicines.forEach(medicine => {
+                const medicineDiv = document.createElement('div');
+                medicineDiv.innerHTML = `
+                    <h2>${medicine.name}</h2>
+                    <p>Price: $${medicine.price}</p>
+                    <p>Quantity: ${medicine.quantity}</p>
+                `;
+                medicinesDiv.appendChild(medicineDiv);
+            });
+        };
+    </script>
+</body>
+</html>
