@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Set Reminder{% endblock %}
+{% block content %}
+<h2>Set Reminder</h2>
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.date.label }}<br>
+        {{ form.date() }}<br>
+    </div>
+    <div>
+        {{ form.description.label }}<br>
+        {{ form.description() }}<br>
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
